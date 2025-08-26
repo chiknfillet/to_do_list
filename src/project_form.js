@@ -3,7 +3,7 @@ import pubsub from './pub_sub.js';
 export default (function() {
     pubsub.on('showProjectForm', showForm);
 
-    (function initial_display() {
+    function initial_display() {
         const container = document.querySelector('body');
         const form = document.createElement('form');
         form.classList.add('project-form');
@@ -56,8 +56,8 @@ export default (function() {
         form.appendChild(cancelButton);
         form.appendChild(submitButton);
         container.appendChild(form);
-        hideForm();
-    })();
+        
+    }
 
     function showForm() {
         const form = document.querySelector('.project-form');
@@ -70,4 +70,7 @@ export default (function() {
         form.reset();
         form.style.display = 'none';
     }
+
+    initial_display();
+    hideForm();
 })();

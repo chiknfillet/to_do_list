@@ -70,10 +70,9 @@ export default (function() {
                 let project = projects.find(p => p.name === taskProject);
                 if (project) {
                     project.tasks = project.tasks || [];
-                    project.tasks.push({ name: taskName, description: taskDescription, priority: taskPriority, dueDate: taskDueDate });
+                    project.tasks.push({ name: taskName, description: taskDescription, priority: taskPriority, dueDate: taskDueDate, isCompleted: false });
                     localStorage.setItem('projects', JSON.stringify(projects));
                     pubsub.emit('updateContentDisplay', project.tasks);
-                    console.log(project);
                 } else {
                     alert('Selected project does not exist.');
                 }
@@ -92,7 +91,18 @@ export default (function() {
     function showForm() {
         const form = document.querySelector('.task-form');
         form.style.display = 'block';
-        }
+
+        const projectSelect = form.querySelector('select[name="taskProject"]');
+        projectSelect.innerHTML = ''; 
+
+        const projects = JSON.parse(localStorage.getItem('projects')) || [];
+        projects.forEach(project => {
+            const optionElement = document.createElement('option');
+            optionElement.value = project.name;
+            optionElement.textContent = project.name;
+            projectSelect.appendChild(optionElement);
+        });
+    }
 
     function hideForm() {
         const form = document.querySelector('.task-form');

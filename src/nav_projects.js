@@ -41,6 +41,6 @@ export default (function () {
 
     function handleProjectClick(project) {
         pubsub.emit("updateHeaderDisplay", `Project: ${project.name}`);
-        pubsub.emit("updateContentDisplay", project.tasks || []);
+        pubsub.emit("updateContentDisplay", project || []);
     }
 })();
