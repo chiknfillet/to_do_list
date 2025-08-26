@@ -66,13 +66,16 @@ export default (function() {
             const taskProject = form.taskProject.value;
 
             if (taskName) {
-                let projects = JSON.parse(localStorage.getItem('projects')) || [];
-                let project = projects.find(p => p.name === taskProject);
+                const projects = JSON.parse(localStorage.getItem('projects')) || [];
+                const project = projects.find(p => p.name === taskProject);
                 if (project) {
-                    project.tasks = project.tasks || [];
-                    project.tasks.push({ name: taskName, description: taskDescription, priority: taskPriority, dueDate: taskDueDate, isCompleted: false });
-                    localStorage.setItem('projects', JSON.stringify(projects));
-                    pubsub.emit('updateContentDisplay', project.tasks);
+                    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                    const id = project.id
+                    tasks.push({ id: id, name: taskName, description: taskDescription, priority: taskPriority, dueDate: taskDueDate, isCompleted: false });
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    console.log(projects)
+                    console.log(tasks);
+                    // pubsub.emit('updateContentDisplay', project.tasks); //
                 } else {
                     alert('Selected project does not exist.');
                 }

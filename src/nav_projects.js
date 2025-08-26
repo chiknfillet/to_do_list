@@ -41,6 +41,6 @@ export default (function () {
 
     function handleProjectClick(project) {
         pubsub.emit("updateHeaderDisplay", `Project: ${project.name}`);
-        pubsub.emit("updateContentDisplay", project || []);
+        pubsub.emit("updateContentDisplay", (JSON.parse(localStorage.getItem('tasks')) || []).filter(task => task.id === project.id && !task.isDeleted));
     }
 })();

@@ -5,56 +5,41 @@ export default (function() {
     pubsub.on('updateContentDisplay', update_display);
 
     (function initial_display() {
-        const allTasks = JSON.parse(localStorage.getItem('projects')) || [];
+        const allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
         update_display(allTasks);
     })();
 
-    function update_display(projects) {
+    function update_display(tasks) {
         container.innerHTML = '';
 
-        if (String.isString(projects) === true) {
-            fetchAllTasks(projects);
-        }
-        else if (Array.isArray(projects) === false) {
-            projects = [projects];
-        }
+        // if (String.isString(tasks) === true) {
+        //     fetchAllTasks(tasks);
+        // }
+        // else if (Array.isArray(tasks) === false) {
+        //     tasks = [tasks];
+        // }
 
-        projects.forEach(project => {
-            project.tasks.forEach(task => {
-                const taskItem = document.createElement('div');
-                taskItem.classList.add('task-item');
+        tasks.forEach(task => {
+            const taskItem = document.createElement('div');
+            taskItem.classList.add('task-item');
 
-                const taskTitle = document.createElement('h3');
-                taskTitle.textContent = task.name;
-                taskItem.appendChild(taskTitle);
+            const taskTitle = document.createElement('h3');
+            taskTitle.textContent = task.name;
+            taskItem.appendChild(taskTitle);
 
-                const taskDesc = document.createElement('p');
-                taskDesc.textContent = task.description;
-                taskItem.appendChild(taskDesc);
+            const taskDesc = document.createElement('p');
+            taskDesc.textContent = task.description;
+            taskItem.appendChild(taskDesc);
 
-                const taskDue = document.createElement('p');
-                taskDue.textContent = `Due: ${task.dueDate}`;
-                taskItem.appendChild(taskDue);
+            const taskDue = document.createElement('p');
+            taskDue.textContent = `Due: ${task.dueDate}`;
+            taskItem.appendChild(taskDue);
 
-                const taskPriority = document.createElement('p');
-                taskPriority.textContent = `Priority: ${task.priority}`;
-                taskItem.appendChild(taskPriority);
+            const taskPriority = document.createElement('p');
+            taskPriority.textContent = `Priority: ${task.priority}`;
+            taskItem.appendChild(taskPriority);
 
-                container.appendChild(taskItem);
-            });
+            container.appendChild(taskItem);
         });
-    }
-
-    function fetchAllTasks(code) {
-        if (code === 'All') {
-            const allTasks = [];
-            const projects = JSON.parse(localStorage.getItem('projects')) || [];
-            projects.forEach(project => {
-                if (project.tasks != []){
-                    allTasks.push(project);
-                }
-            });
-            return allTasks;
-        }
     }
 })();
