@@ -8,7 +8,7 @@ export default function createNavProjects() {
     const addProjectButton = document.createElement("button");
     addProjectButton.textContent = "+";
     addProjectButton.addEventListener("click", () => {
-        pubsub.emit("showAddProjectForm");
+        pubsub.emit("showProjectForm");
     });
     project_container.appendChild(project_title);
     project_container.appendChild(addProjectButton);

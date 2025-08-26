@@ -1,7 +1,7 @@
 import logoSrc from './logos/list-box-outline.svg';
 import pubsub from './pub_sub.js';
 
-export default (function createHeader() {
+export default (function() {
     pubsub.on('updateCurrentDisplay', update_header_display);
 
     (function initial_display() {

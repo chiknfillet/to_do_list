@@ -1,7 +1,6 @@
 import pubsub from './pub_sub.js';
 
-export default (function createNavTasks() {
-    
+export default (function() {
     const container = document.querySelector('.nav');
     const task_container = document.createElement("div");
     const task_title = document.createElement("h2");

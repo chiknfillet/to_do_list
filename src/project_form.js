@@ -1,52 +1,68 @@
 import pubsub from './pub_sub.js';
 
-export default function createAddProjectForm() {
-    const container = document.querySelector('body');
-    const form = document.createElement('form');
+export default (function createAddProjectForm() {
+    pubsub.on('showProjectForm', showForm);
 
-    const fields = [{ type: 'text', name: 'projectName', placeholder: 'Project Name' },
-                    { type: 'color', name: 'projectColor', placeholder: 'Project Color' }
-                ];
+    (function initial_display() {
+        const container = document.querySelector('body');
+        const form = document.createElement('form');
+        form.classList.add('project-form');
 
-    fields.forEach(field => {
-        const formGroup = document.createElement('div');
-        formGroup.className = 'form-group';
-        form.appendChild(formGroup);
-        const label = document.createElement('label');
-        label.textContent = field.placeholder;
-        label.setAttribute('for', field.name);
-        formGroup.appendChild(label);
-        const input = document.createElement('input');
-        input.type = field.type;
-        input.name = field.name;
-        input.placeholder = field.placeholder
-        formGroup.appendChild(input);
-    });
+        const fields = [{ type: 'text', name: 'projectName', placeholder: 'Project Name' },
+                        { type: 'color', name: 'projectColor', placeholder: 'Project Color' }
+                    ];
 
-    const cancelButton = document.createElement('button');
-    cancelButton.type = 'button';
-    cancelButton.textContent = 'Cancel';
-    cancelButton.addEventListener('click', () => {
+        fields.forEach(field => {
+            const formGroup = document.createElement('div');
+            formGroup.className = 'form-group';
+            form.appendChild(formGroup);
+            const label = document.createElement('label');
+            label.textContent = field.placeholder;
+            label.setAttribute('for', field.name);
+            formGroup.appendChild(label);
+            const input = document.createElement('input');
+            input.type = field.type;
+            input.name = field.name;
+            input.placeholder = field.placeholder
+            formGroup.appendChild(input);
+        });
+
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
+            hideForm();
+        });
+
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Add Project';
+        submitButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const projectName = form.projectName.value;
+            const projectColor = form.projectColor.value;
+            if (projectName) {
+                pubsub.emit('createProject', { name: projectName, color: projectColor });
+                hideForm();
+            } else {
+                alert('Project name is required.');
+            }
+        });
+        
+        form.appendChild(cancelButton);
+        form.appendChild(submitButton);
+        container.appendChild(form);
+    })();
+
+    function showForm() {
+        const form = document.querySelector('.project-form');
+        form.reset();
+        form.style.display = 'block';
+    }
+
+    function hideForm() {
+        const form = document.querySelector('.project-form');
         form.reset();
         form.style.display = 'none';
-    });
-
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Add Project';
-    submitButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        const projectName = form.projectName.value;
-        const projectColor = form.projectColor.value;
-        if (projectName) {
-            pubsub.emit('createProject', { name: projectName, color: projectColor });
-            form.reset();
-            form.style.display = 'none';
-        }
-    });
-    
-    form.appendChild(cancelButton);
-    form.appendChild(submitButton);
-    container.appendChild(form);
-    form.style.display = 'none';
-}
+    }
+})();
