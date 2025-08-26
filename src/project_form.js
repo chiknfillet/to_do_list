@@ -1,6 +1,6 @@
 import pubsub from './pub_sub.js';
 
-export default (function createAddProjectForm() {
+export default (function() {
     pubsub.on('showProjectForm', showForm);
 
     (function initial_display() {
@@ -42,7 +42,11 @@ export default (function createAddProjectForm() {
             const projectName = form.projectName.value;
             const projectColor = form.projectColor.value;
             if (projectName) {
-                pubsub.emit('createProject', { name: projectName, color: projectColor });
+                let projects = JSON.parse(localStorage.getItem('projects')) || [];
+                projects.push({ name: projectName, color: projectColor });
+                localStorage.setItem('projects', JSON.stringify(projects));
+
+                pubsub.emit('newProjectAdded', projects);
                 hideForm();
             } else {
                 alert('Project name is required.');
@@ -52,6 +56,7 @@ export default (function createAddProjectForm() {
         form.appendChild(cancelButton);
         form.appendChild(submitButton);
         container.appendChild(form);
+        hideForm();
     })();
 
     function showForm() {
