@@ -33,9 +33,14 @@ export default (function () {
             listItem.textContent = project.name;
             listItem.style.color = project.color || 'black';
             listItem.addEventListener("click", () => {
-                pubsub.emit("updateCurrentDisplay", `Project: ${project.name}`);
+                handleProjectClick(project);
             });
             list.appendChild(listItem);
         });
+    }
+
+    function handleProjectClick(project) {
+        pubsub.emit("updateHeaderDisplay", `Project: ${project.name}`);
+        pubsub.emit("updateContentDisplay", project.tasks || []);
     }
 })();

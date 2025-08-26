@@ -12,7 +12,7 @@ export default (function() {
         const button = document.createElement("li");
         button.textContent = label;
         button.addEventListener("click", () => {
-            pubsub.emit("updateCurrentDisplay", `Tasks: ${label}`);
+            pubsub.emit("updateHeaderDisplay", `Tasks: ${label}`);
         });
         list.appendChild(button);
     });

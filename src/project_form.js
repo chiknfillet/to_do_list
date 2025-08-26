@@ -15,7 +15,6 @@ export default (function() {
         fields.forEach(field => {
             const formGroup = document.createElement('div');
             formGroup.className = 'form-group';
-            form.appendChild(formGroup);
             const label = document.createElement('label');
             label.textContent = field.placeholder;
             label.setAttribute('for', field.name);
@@ -25,6 +24,7 @@ export default (function() {
             input.name = field.name;
             input.placeholder = field.placeholder
             formGroup.appendChild(input);
+            form.appendChild(formGroup);
         });
 
         const cancelButton = document.createElement('button');
@@ -43,7 +43,7 @@ export default (function() {
             const projectColor = form.projectColor.value;
             if (projectName) {
                 let projects = JSON.parse(localStorage.getItem('projects')) || [];
-                projects.push({ name: projectName, color: projectColor });
+                projects.push({ name: projectName, color: projectColor, tasks: []});
                 localStorage.setItem('projects', JSON.stringify(projects));
 
                 pubsub.emit('newProjectAdded', projects);
