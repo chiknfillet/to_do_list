@@ -1,0 +1,52 @@
+import pubsub from './pub_sub.js';
+
+export default function createAddProjectForm() {
+    const container = document.querySelector('body');
+    const form = document.createElement('form');
+
+    const fields = [{ type: 'text', name: 'projectName', placeholder: 'Project Name' },
+                    { type: 'color', name: 'projectColor', placeholder: 'Project Color' }
+                ];
+
+    fields.forEach(field => {
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        form.appendChild(formGroup);
+        const label = document.createElement('label');
+        label.textContent = field.placeholder;
+        label.setAttribute('for', field.name);
+        formGroup.appendChild(label);
+        const input = document.createElement('input');
+        input.type = field.type;
+        input.name = field.name;
+        input.placeholder = field.placeholder
+        formGroup.appendChild(input);
+    });
+
+    const cancelButton = document.createElement('button');
+    cancelButton.type = 'button';
+    cancelButton.textContent = 'Cancel';
+    cancelButton.addEventListener('click', () => {
+        form.reset();
+        form.style.display = 'none';
+    });
+
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Add Project';
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const projectName = form.projectName.value;
+        const projectColor = form.projectColor.value;
+        if (projectName) {
+            pubsub.emit('createProject', { name: projectName, color: projectColor });
+            form.reset();
+            form.style.display = 'none';
+        }
+    });
+    
+    form.appendChild(cancelButton);
+    form.appendChild(submitButton);
+    container.appendChild(form);
+    form.style.display = 'none';
+}
