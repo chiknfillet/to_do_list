@@ -1,7 +1,7 @@
 import logoSrc from './logos/list-box-outline.svg';
 import pubsub from './pub_sub.js';
 
-export default (function() {
+export default function() {
     pubsub.on('updateHeaderDisplay', update_header_display);
 
     (function initial_display() {
@@ -18,18 +18,11 @@ export default (function() {
         const title = document.createElement('h2');
         title.textContent = "Tasks: All";
         main_container.appendChild(title);
-
-        const addTaskButton = document.createElement('button');
-        addTaskButton.textContent = "+ Add Task";
-        addTaskButton.addEventListener('click', () => {
-            pubsub.emit('showTaskForm');
-        });
-        main_container.appendChild(addTaskButton);
     })();
 
     function update_header_display(message_display) {
         const container = document.querySelector('.header>h2');
         container.textContent = message_display;
     }
-})();
+};
 

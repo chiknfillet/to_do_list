@@ -1,6 +1,6 @@
 import pubsub from './pub_sub.js';
 
-export default (function() {
+export default function() {
     pubsub.on('showTaskForm', showForm);
 
     (function initial_display() {
@@ -65,13 +65,15 @@ export default (function() {
             const taskDueDate = form.taskDueDate.value;
             const taskProject = form.taskProject.value;
 
-            if (taskName) {
-                const projects = JSON.parse(localStorage.getItem('projects')) || [];
+            const formValidity = checkForm(taskName, taskDescription, taskDueDate)
+
+            if (formValidity) {
+                const projects = JSON.parse(localStorage.getItem('projects'));
                 const project = projects.find(p => p.name === taskProject);
                 if (project) {
                     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
                     const id = project.id
-                    tasks.push({ id: id, name: taskName, description: taskDescription, priority: taskPriority, dueDate: taskDueDate, isCompleted: false });
+                    tasks.push({ id: id, name: taskName, description: taskDescription, priority: taskPriority, dueDate: taskDueDate, isCompleted: false. isDeleted });
                     localStorage.setItem('tasks', JSON.stringify(tasks));
                     console.log(projects)
                     console.log(tasks);
@@ -81,11 +83,15 @@ export default (function() {
                 }
                 hideForm();
             } else {
-                alert('Task name is required.');
+                alert('Please fill all the required fields.');
             }
         });
-        form.appendChild(cancelButton);
-        form.appendChild(submitButton);
+        
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        formGroup.appendChild(cancelButton);
+        formGroup.appendChild(submitButton);
+        form.appendChild(formGroup);
 
         container.appendChild(form);
         hideForm();
@@ -111,4 +117,11 @@ export default (function() {
         const form = document.querySelector('.task-form');
         form.style.display = 'none';
     }
-})();
+
+    function checkForm(name, description, date) {
+        if (name && description && date) {
+            return true
+        }
+        return false
+    }
+};

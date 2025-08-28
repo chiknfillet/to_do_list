@@ -1,6 +1,6 @@
 import pubsub from './pub_sub.js';
 
-export default (function() {
+export default function() {
     pubsub.on('showProjectForm', showForm);
 
     (function initial_display() {
@@ -41,9 +41,10 @@ export default (function() {
             e.preventDefault();
             const projectName = form.projectName.value;
             const projectColor = form.projectColor.value;
+            console.log(projectColor)
             const id = crypto.randomUUID();
             if (projectName) {
-                let projects = JSON.parse(localStorage.getItem('projects')) || [];
+                let projects = JSON.parse(localStorage.getItem('projects'));
                 projects.push({id: id, name: projectName, color: projectColor});
                 localStorage.setItem('projects', JSON.stringify(projects));
 
@@ -54,8 +55,12 @@ export default (function() {
             }
         });
         
-        form.appendChild(cancelButton);
-        form.appendChild(submitButton);
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        formGroup.appendChild(cancelButton);
+        formGroup.appendChild(submitButton);
+        form.appendChild(formGroup);
+
         container.appendChild(form);
         hideForm();
     })();
@@ -71,4 +76,4 @@ export default (function() {
         form.reset();
         form.style.display = 'none';
     }
-})();
+};
